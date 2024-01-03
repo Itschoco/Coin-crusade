@@ -11,10 +11,10 @@
 #include <vector>
 
 enum class GameState {
-	START_MENU,
-	GAMEPLAY,
-	GAME_OVER,
-	EXIT
+	START_MENU,  // Initial state for the game start menu
+	GAMEPLAY,    // State during active gameplay
+	GAME_OVER,   // State when the game ends
+	EXIT         // State to exit the game
 };
 
 class GameManager {
@@ -22,18 +22,20 @@ public:
 	GameManager(int windowWidth, int windowHeight) : windowWidth(windowWidth), windowHeight(windowHeight) {}
 
 	void RunGame() {
-		InitWindow(windowWidth, windowHeight, "Coin Crusade");
+		// Initialization of game elements
+		InitWindow(windowWidth, windowHeight, "Coin Crusade"); // Initialize window
 		InitAudioDevice(); // Initialize audio device
 
+		// Initialize game objects
 		Character knight{ windowWidth, windowHeight };
 		SoundManager soundManager;
-		Map gameMap("world/map.png", 8.0f); // Create a Map object
+		Map gameMap("world/map.png", 8.0f);
 		PointSystem pointSystem;
 		ObjectManager spawner(gameMap, knight, pointSystem, soundManager);
-		std::vector<Enemy*> enemies; // Create an empty vector to hold enemies
+		std::vector<Enemy*> enemies;
 		std::vector<Prop> props{
-		Prop{Vector2{600.f, 300.f}, LoadTexture("nature_tileset/Rock.png")},
-		Prop{Vector2{400.f, 500.f}, LoadTexture("nature_tileset/Log.png")}
+			Prop{Vector2{600.f, 300.f}, LoadTexture("nature_tileset/Rock.png")},
+			Prop{Vector2{400.f, 500.f}, LoadTexture("nature_tileset/Log.png")}
 		};
 
 		bool isDeadSoundPlayed = false; // Flag to track if the dead sound has been played
@@ -41,23 +43,25 @@ public:
 		soundManager.LoadSounds();
 		SetTargetFPS(60);
 		while (!WindowShouldClose()) {
+
 			BeginDrawing();
 			ClearBackground(WHITE);
 
+			// Game state switching and rendering
 			switch (currentState) {
-			case GameState::START_MENU:
+			case GameState::START_MENU: // Drawing the start menu
 				DrawStartMenu();
 				break;
 
-			case GameState::GAMEPLAY:
+			case GameState::GAMEPLAY: // Drawing the active gameplay
 				DrawGame(knight, gameMap, enemies, props, spawner, soundManager, pointSystem, isDeadSoundPlayed);
 				break;
 
-			case GameState::GAME_OVER:
-				DrawGameOver();
+			case GameState::GAME_OVER: // Drawing the game over screen
+				DrawGameOver(knight, enemies, pointSystem, isDeadSoundPlayed);
 				break;
 
-			case GameState::EXIT:
+			case GameState::EXIT: // Exiting the game
 				CloseWindow();
 				soundManager.UnloadSounds();
 				return;
@@ -69,18 +73,43 @@ public:
 			EndDrawing();
 		}
 
-		CloseWindow();
-		soundManager.UnloadSounds();
+		CloseWindow(); // Close the game window
+		soundManager.UnloadSounds(); // Unload game sounds
+	}
+
+	void ResetGame(Character& knight, std::vector<Enemy*>& enemies, PointSystem& pointSystem, bool& isDeadSoundPlayed) {
+		// Reset character 
+		knight.Reset();
+
+		// Clear existing enemies and reset any other enemy-related properties
+		for (auto enemy : enemies) {
+			delete enemy;
+		}
+		enemies.clear();
+
+		// Reset point system, sounds, flags
+		pointSystem.resetScore();
+		isDeadSoundPlayed = false;
+
+		// Set the game state back to the start menu
+		currentState = GameState::START_MENU;
 	}
 
 private:
+	// Define the current state of the game
 	GameState currentState = GameState::START_MENU;
+	// Store window dimensions
 	int windowWidth, windowHeight;
 
+	// Draw the start menu
 	void DrawStartMenu() {
+		// Draw the game title
+		DrawText("Coin Crusade", windowWidth / 2 - MeasureText("Coin Crusade", 40) / 2, windowHeight / 4, 40, RED);
+		// Draw the start and quit options
 		DrawText("Press Enter to Start", windowWidth / 2 - MeasureText("Press Enter to Start", 30) / 2, windowHeight / 2 - 50, 30, RED);
 		DrawText("Press Esc to Quit", windowWidth / 2 - MeasureText("Press Esc to Quit", 30) / 2, windowHeight / 2 + 50, 30, RED);
 
+		// Check for key presses to change the game state
 		if (IsKeyPressed(KEY_ENTER)) {
 			currentState = GameState::GAMEPLAY;
 		}
@@ -88,12 +117,14 @@ private:
 			currentState = GameState::EXIT;
 		}
 	}
+
+	// Draw the game elements during gameplay
 	void DrawGame(Character& knight, Map& gameMap, std::vector<Enemy*>& enemies, std::vector<Prop>& props,
 		ObjectManager& spawner, SoundManager& soundManager, PointSystem& pointSystem, bool& isDeadSoundPlayed) {
-
 		// Draw the map based on player position
 		gameMap.Draw(knight.getWorldPos());
 
+		// Set targets for enemies
 		for (auto enemy : enemies) {
 			enemy->setTarget(&knight);
 		}
@@ -101,19 +132,23 @@ private:
 		// Calculate the map offset based on the knight's position
 		Vector2 mapOffset = Vector2Subtract(knight.getWorldPos(), Vector2{ windowWidth / 2.0f, windowHeight / 2.0f });
 
+		// Update and draw spawned objects
 		spawner.Update(GetFrameTime(), knight.getWorldPos(), windowWidth, windowHeight);
 		spawner.DrawObjects(mapOffset);
 
+		// Update the knight's state
 		knight.tick(GetFrameTime());
 
+		// Render props
 		for (auto& prop : props) {
 			prop.Render(knight.getWorldPos());
 		}
 
-		if (!knight.getAlive()) { // Character is not alive
+		// Check if the knight is dead
+		if (!knight.getAlive()) {
 			if (!isDeadSoundPlayed) {
 				soundManager.PlayPlayerDeadSound();
-				isDeadSoundPlayed = true; // Update the flag
+				isDeadSoundPlayed = true;
 
 				// Remove all existing enemies when the player is dead
 				for (auto enemy : enemies) {
@@ -122,25 +157,22 @@ private:
 				enemies.clear();
 			}
 
-			// Calculate text width and position
-			const char* gameOverText = "Game Over!";
-			Vector2 textMeasure = MeasureTextEx(GetFontDefault(), gameOverText, 40, 1);
-			Vector2 textPosition = { windowWidth / 2.0f - textMeasure.x / 2.0f, windowHeight / 2.0f - textMeasure.y / 2.0f };
-
-			DrawText(gameOverText, textPosition.x, textPosition.y, 40, RED);
+			// Display game over text and handle game over logic
+			DrawGameOver(knight, enemies, pointSystem, isDeadSoundPlayed);
 		}
 		else { // Character is alive
-			isDeadSoundPlayed = false; // Reset the flag when the player is alive
-			// Play background music
+			isDeadSoundPlayed = false;
 
-			// Check if it's time to spawn new enemies (every 5 seconds for testing)
+			// Play background music
+			soundManager.PlayBackgroundMusic();
+
+			// Check if it's time to spawn new enemies
 			double currentTime = GetTime();
 			static double lastSpawnTime = currentTime;
 
-			if (currentTime - lastSpawnTime >= 5.0) // Check if 5 seconds have passed for testing
-			{
+			if (currentTime - lastSpawnTime >= 5.0) {
 				Enemy::UpdateEnemySpawn(enemies, &knight, gameMap, windowWidth, windowHeight);
-				lastSpawnTime = currentTime; // Update the last spawn time
+				lastSpawnTime = currentTime;
 			}
 		}
 
@@ -156,25 +188,33 @@ private:
 			}
 		}
 
+		// Attack enemies on left mouse button click
 		if (IsMouseButtonDown(MOUSE_LEFT_BUTTON)) {
 			knight.attackEnemies(enemies, soundManager, pointSystem);
 		}
 
-		// Draw score
+		// Draw the player's score
 		DrawText(std::to_string(pointSystem.getScore()).c_str(), 10, 50, 30, RED);
 
+		// Update and draw enemies
 		for (auto& enemy : enemies) {
 			enemy->tick(GetFrameTime());
 		}
 	}
 
-
-
-	void DrawGameOver() {
+	// Draw the game over screen
+	void DrawGameOver(Character& knight, std::vector<Enemy*>& enemies, PointSystem& pointSystem, bool& isDeadSoundPlayed) {
+		// Display game over text
 		DrawText("Game Over!", windowWidth / 2 - MeasureText("Game Over!", 40) / 2, windowHeight / 2 - 20, 40, RED);
 
-		if (IsKeyPressed(KEY_ENTER)) {
-			currentState = GameState::START_MENU;
+		// Prompt to restart the game
+		DrawText("Press R to Restart", windowWidth / 2 - MeasureText("Press R to Restart", 30) / 2, windowHeight / 2 + 50, 30, RED);
+
+		// Check for key press to reset the game
+		if (IsKeyPressed(KEY_R)) {
+			ResetGame(knight, enemies, pointSystem, isDeadSoundPlayed);
 		}
 	}
+
+
 };

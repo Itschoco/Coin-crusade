@@ -2,15 +2,15 @@
 #include "raylib.h"
 #include "raymath.h"
 
-// BaseCharacter.cpp
-
 BaseCharacter::BaseCharacter() {
 }
 
+// Revert the character's movement to the last frame's position
 void BaseCharacter::undoMovement() {
 	worldPos = worldPosLastFrame;
 }
 
+// Function to handle taking damage by the character
 void BaseCharacter::takeDamage(float damage) {
 	if (shield > 0.0f) {
 		shield -= damage;
@@ -22,10 +22,11 @@ void BaseCharacter::takeDamage(float damage) {
 	}
 }
 
+// Get the collision rectangle for the character
 Rectangle BaseCharacter::getCollisionRec() {
-	// Adjust the hitbox dimensions as needed
-	float smallerWidth = width * 0.8f; // Reduce the width by 20%
-	float smallerHeight = height * 0.8f; // Reduce the height by 20%
+	// Calculate hitbox dimensions 
+	float smallerWidth = width * 0.8f;
+	float smallerHeight = height * 0.8f;
 
 	return Rectangle{
 		getScreenPos().x + (width - smallerWidth) / 2.0f,
@@ -35,8 +36,9 @@ Rectangle BaseCharacter::getCollisionRec() {
 	};
 }
 
+
 void BaseCharacter::tick(float deltaTime) {
-	worldPosLastFrame = worldPos;
+	worldPosLastFrame = worldPos; // Store the previous frame's position
 
 	// Update animation frame
 	runningTime += deltaTime;
@@ -46,6 +48,7 @@ void BaseCharacter::tick(float deltaTime) {
 		if (frame > maxFrames) frame = 0;
 	}
 
+	// Move character based on velocity and update texture accordingly
 	if (Vector2Length(velocity) != 0.0) {
 		worldPos = Vector2Add(worldPos, Vector2Scale(Vector2Normalize(velocity), speed));
 		rightLeft = (velocity.x < 0.f) ? -1.f : 1.f;

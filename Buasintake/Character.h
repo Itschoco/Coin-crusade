@@ -18,6 +18,7 @@ public:
 	virtual Vector2 getScreenPos() override;
 	Rectangle getWeaponCollisonRec() { return weaponCollisionRec; }
 	void attackEnemies(std::vector<Enemy*>& enemies, SoundManager& soundManager, PointSystem& pointSystem);
+	void Reset();
 
 
 

@@ -6,7 +6,6 @@
 class SoundManager
 {
 public:
-	// Function declarations
 	void LoadSounds();
 	void PlayHitSound();
 	void PlayEnemyDeadSound();
@@ -17,9 +16,9 @@ public:
 	void UnloadSounds();
 
 private:
-	Sound swordSound;       // Sword sound
-	Sound enemySound;     // Enemy dead sound
-	Sound playerSound;    // Player dead sound
+	Sound swordSound;
+	Sound enemySound;
+	Sound playerSound;
 	Sound collectSound;
 	Music backgroundMusic;
 	bool soundsLoaded;

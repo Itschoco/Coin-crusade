@@ -13,7 +13,7 @@ class ObjectManager {
 public:
 	std::vector<GameObject*> objects;
 
-	//Update the constructor to accept PointSystem by reference
+
 	ObjectManager(Map& map, Character& knightObj, PointSystem& pointSystemRef, SoundManager& soundManagerRef)
 		: gameMap(map), knight(knightObj), pointSystem(pointSystemRef), soundManager(soundManagerRef) {}
 
@@ -21,32 +21,32 @@ public:
 	float elapsedTime = 0.0f; // Time elapsed since last spawn
 
 	void Update(float deltaTime, const Vector2& playerPos, int windowWidth, int windowHeight) {
-		elapsedTime += deltaTime;
+		elapsedTime += deltaTime; // Increment time elapsed since last update
 
-		// Check for object deletion first
+		// Check for object deletion based on a time limit
 		auto it = objects.begin();
 		while (it != objects.end()) {
 			GameObject* object = *it;
-			object->deleteTime += deltaTime;
+			object->deleteTime += deltaTime; // Increment delete time for each object
 
-			// Check if the object exceeds the time limit
+			// Check if the object exceeds the time limit for deletion
 			if (object->deleteTime >= 20.0f) {
-				// Free the texture associated with the object before deleting it
+				// Free the texture associated with the object before deleting it based on its type
 				if (Coin* coin = dynamic_cast<Coin*>(object)) {
-					UnloadTexture(coin->texture);
+					UnloadTexture(coin->texture); // Unload coin texture
 				}
 				else if (HealthBottle* healthBottle = dynamic_cast<HealthBottle*>(object)) {
-					UnloadTexture(healthBottle->texture);
+					UnloadTexture(healthBottle->texture); // Unload health bottle texture
 				}
 				else if (ShieldBottle* shieldBottle = dynamic_cast<ShieldBottle*>(object)) {
-					UnloadTexture(shieldBottle->texture);
+					UnloadTexture(shieldBottle->texture); // Unload shield bottle texture
 				}
 
-				delete object;
-				it = objects.erase(it);
+				delete object; // Delete the object
+				it = objects.erase(it); // Erase the object from the vector
 			}
 			else {
-				++it;
+				++it; // Move to the next object
 			}
 		}
 
@@ -64,9 +64,9 @@ public:
 			if (coin) {
 				coin->updateTime -= deltaTime; // Reduce the update time by delta time
 				if (coin->updateTime <= 0.0f) {
-					coin->currentFrame++;
+					coin->currentFrame++; // Move to the next frame in the animation
 					if (coin->currentFrame >= coin->frameCount) {
-						coin->currentFrame = 0;
+						coin->currentFrame = 0; // Reset frame to the beginning of animation
 					}
 					coin->updateTime = 1.0f / 8.0f; // Reset update time for the next frame
 				}
@@ -74,9 +74,9 @@ public:
 			else if (healthBottle) {
 				healthBottle->updateTime -= deltaTime; // Reduce the update time by delta time
 				if (healthBottle->updateTime <= 0.0f) {
-					healthBottle->currentFrame++;
+					healthBottle->currentFrame++; // Move to the next frame in the animation
 					if (healthBottle->currentFrame >= healthBottle->frameCount) {
-						healthBottle->currentFrame = 0;
+						healthBottle->currentFrame = 0; // Reset frame to the beginning of animation
 					}
 					healthBottle->updateTime = 1.0f / 8.0f; // Reset update time for the next frame
 				}
@@ -84,9 +84,9 @@ public:
 			else if (shieldBottle) {
 				shieldBottle->updateTime -= deltaTime; // Reduce the update time by delta time
 				if (shieldBottle->updateTime <= 0.0f) {
-					shieldBottle->currentFrame++;
+					shieldBottle->currentFrame++; // Move to the next frame in the animation
 					if (shieldBottle->currentFrame >= shieldBottle->frameCount) {
-						shieldBottle->currentFrame = 0;
+						shieldBottle->currentFrame = 0; // Reset frame to the beginning of animation
 					}
 					shieldBottle->updateTime = 1.0f / 8.0f; // Reset update time for the next frame
 				}
@@ -100,21 +100,27 @@ public:
 
 
 	void CheckCollisionsWithKnight(const Vector2& playerPos) {
+		// Get the collision rectangle of the knight
 		Rectangle knightCollisionRec = knight.getCollisionRec();
 
-		for (auto it = objects.begin(); it != objects.end(); /* Increment conditionally inside loop */) {
+		// Loop through all objects to check for collisions with the knight
+		for (auto it = objects.begin(); it != objects.end();) {
 			GameObject* object = *it;
 
+			// Calculate distance between object and knight
 			float distance = Vector2Distance(object->worldPos, playerPos);
+
+			// Check for collision between object and knight
 			if (distance < object->radius + knightCollisionRec.width / 2.0f) {
-				// Collision detected between object and knight, handle effects based on object type
+
+				// Check the type of the object (Coin, HealthBottle, ShieldBottle)
 				Coin* coin = dynamic_cast<Coin*>(object);
 				HealthBottle* healthBottle = dynamic_cast<HealthBottle*>(object);
 				ShieldBottle* shieldBottle = dynamic_cast<ShieldBottle*>(object);
 
 				if (coin) {
 					// Coin: Gain 50 points
-					pointSystem.increaseScore(50); // Increment the score by 50
+					pointSystem.increaseScore(50);
 					soundManager.PlayCollectSound();
 				}
 				else if (healthBottle) {
@@ -158,7 +164,7 @@ public:
 		float objectRadius = 10.0f;
 		Vector2 position;
 
-		// Get scaled map dimensions from the Map instance
+		// Get scaled map dimensions 
 		float mapWidth = gameMap.GetWidth() * gameMap.GetScale();
 		float mapHeight = gameMap.GetHeight() * gameMap.GetScale();
 
@@ -193,7 +199,7 @@ public:
 		// Generate a random number between 1 and 100
 		int randomValue = GetRandomValue(1, 100);
 
-		// Adjust the ranges based on desired spawn rates
+		// Determine the type of object to spawn based on different spawn rates
 		if (randomValue <= 50) {
 			// 50% chance for Coin
 			return 0; // Coin
