@@ -1,4 +1,4 @@
-#include "Game.h"
+#include "GameManager.h"
 
 int main() {
 	const int windowWidth{ 800 };

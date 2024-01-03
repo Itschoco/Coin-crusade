@@ -30,9 +30,6 @@
     <ClCompile Include="Enemy.cpp">
       <Filter>Resource Files</Filter>
     </ClCompile>
-    <ClCompile Include="Game.cpp">
-      <Filter>Resource Files</Filter>
-    </ClCompile>
     <ClCompile Include="Soundmanager.cpp">
       <Filter>Resource Files</Filter>
     </ClCompile>
@@ -53,7 +50,7 @@
     <ClInclude Include="Enemy.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Game.h">
+    <ClInclude Include="GameManager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Soundmanager.h">
