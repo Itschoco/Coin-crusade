@@ -65,10 +65,12 @@ void BaseCharacter::tick(float deltaTime) {
 	DrawTexturePro(texture, source, dest, Vector2{}, 0.f, WHITE);
 
 	// Draw health bar
-	DrawRectangle(getScreenPos().x, getScreenPos().y - 10, scale * width * (health / 100.0f), 5, GREEN);
-	DrawRectangleLines(getScreenPos().x, getScreenPos().y - 10, scale * width, 5, BLACK);
+	DrawRectangle(getScreenPos().x, getScreenPos().y - 10, static_cast<int>(roundf(scale * width * (health / 100.0f))), 5, GREEN);
+	DrawRectangleLines(getScreenPos().x, getScreenPos().y - 10, static_cast<int>(roundf(scale * width)), 5, BLACK);
+
 
 	// Draw shield bar
-	DrawRectangle(getScreenPos().x, getScreenPos().y - 15, scale * width * (shield / 100.0f), 5, BLUE);
-	DrawRectangleLines(getScreenPos().x, getScreenPos().y - 15, scale * width, 5, BLACK);
+	DrawRectangle(getScreenPos().x, getScreenPos().y - 15, static_cast<int>(roundf(scale * width * (shield / 100.0f))), 5, BLUE);
+	DrawRectangleLines(getScreenPos().x, getScreenPos().y - 15, static_cast<int>(roundf(scale * width)), 5, BLACK);
+
 }

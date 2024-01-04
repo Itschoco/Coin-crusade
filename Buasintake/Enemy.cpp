@@ -8,8 +8,8 @@ Enemy::Enemy(Vector2 pos, Texture2D idle_texture, Texture2D run_texture, float s
 	texture = idle_texture;
 	idle = idle_texture;
 	run = run_texture;
-	width = texture.width / maxFrames;
-	height = texture.height;
+	width = static_cast<float>(texture.width) / maxFrames;
+	height = static_cast<float>(texture.height);
 	speed = 3.5f;
 }
 
@@ -40,7 +40,7 @@ void Enemy::UpdateEnemySpawn(std::vector<Enemy*>& enemies, Character* target, Ma
 
 	// Check if it's time to spawn new enemies (every 5 seconds for testing)
 	if (currentTime - lastSpawnTime >= 5.0) {
-		int numEnemiesToSpawn = GetRandomValue(10, 30); // Randomly choose between 10 to 30 enemies
+		int numEnemiesToSpawn = GetRandomValue(5, 20); // Randomly choose between 5 to 20 enemies
 
 		for (int i = 0; i < numEnemiesToSpawn; ++i) {
 			Vector2 spawnPosition;
@@ -79,7 +79,7 @@ void Enemy::UpdateEnemySpawn(std::vector<Enemy*>& enemies, Character* target, Ma
 			if (!collisionDetected) {
 				// Randomly choose between goblin and slime
 				int enemyType = GetRandomValue(0, 1); // 0 for goblin, 1 for slime
-				float randomShield = GetRandomValue(0, 50); // Random shield amount
+				float randomShield = static_cast<float>(GetRandomValue(0, 10));// Random shield amount
 
 				// Load textures based on enemy type
 				Texture2D idleTexture, runTexture;

@@ -34,9 +34,16 @@ public:
 		ObjectManager spawner(gameMap, knight, pointSystem, soundManager);
 		std::vector<Enemy*> enemies;
 		std::vector<Prop> props{
-			Prop{Vector2{600.f, 300.f}, LoadTexture("nature_tileset/Rock.png")},
-			Prop{Vector2{400.f, 500.f}, LoadTexture("nature_tileset/Log.png")}
+			Prop{Vector2{900.f, 550.f}, LoadTexture("nature_tileset/Rock.png")},
+			Prop{Vector2{890.f, 1200.f}, LoadTexture("nature_tileset/Log.png")},
+			Prop{Vector2{1270.f, 800.f}, LoadTexture("nature_tileset/Bush.png")},
+			Prop{Vector2{1830.f, 500.f}, LoadTexture("nature_tileset/Sign.png")},
+			Prop{Vector2{1300.f, 550.f}, LoadTexture("nature_tileset/Rock.png")},
+			Prop{Vector2{1900.f, 1800.f}, LoadTexture("nature_tileset/Log.png")},
+			Prop{Vector2{1940.f, 450.f}, LoadTexture("nature_tileset/Bush.png")},
+			Prop{Vector2{1830.f, 1749.f}, LoadTexture("nature_tileset/Sign.png")}
 		};
+
 
 		bool isDeadSoundPlayed = false; // Flag to track if the dead sound has been played
 
