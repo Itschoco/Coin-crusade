@@ -18,3 +18,18 @@ Objective:
 Defeat slimes and goblins to earn points.
 Collect coins scattered throughout the realm to increase your score.
 Seek out blue shieldshards to bolster your defenses and red healthshards to restore your vitality.
+
+
+
+sounds used
+
+Clean fast Swoosh.aiff by Pixabay
+Breeze Of Blood by UNIVERSFIELD
+Videogame Death Sound by Pixabay
+sonic ring sound by sega
+
+music used:
+A Sinister Power Rising - Epic Dark Gothic Soundtrack byGioeleFazzeri
+
+tileset: https://stealthix.itch.io/rpg-nature-tileset
+sprites i used came from a tutorial from Udadamy by GameDev.tv
