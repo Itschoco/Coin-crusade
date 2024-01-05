@@ -20,7 +20,7 @@ void Character::attackEnemies(std::vector<Enemy*>& enemies, SoundManager& soundM
 
 			// Check if the enemy is dead
 			if (!enemy->getAlive()) {
-				pointSystem.increaseScore(100); // Increase score when enemy is killed
+				pointSystem.increaseScore(50); // Increase score when enemy is killed
 			}
 		}
 	}

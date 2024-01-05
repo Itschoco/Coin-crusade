@@ -46,6 +46,9 @@ public:
 
 
 		bool isDeadSoundPlayed = false; // Flag to track if the dead sound has been played
+		
+		// Load the background image
+		LoadBackgroundImage();
 
 		soundManager.LoadSounds();
 		SetTargetFPS(60);
@@ -107,11 +110,21 @@ private:
 	GameState currentState = GameState::START_MENU;
 	// Store window dimensions
 	int windowWidth, windowHeight;
+	Texture2D backgroundImage;
+
+	void LoadBackgroundImage() {
+		backgroundImage = LoadTexture("start_menu/start.png");
+	}
+
 
 	// Draw the start menu
 	void DrawStartMenu() {
+		// Draw the background image first
+		DrawTexture(backgroundImage, 0, 0, WHITE);
+
 		// Draw the game title
 		DrawText("Coin Crusade", windowWidth / 2 - MeasureText("Coin Crusade", 40) / 2, windowHeight / 4, 40, RED);
+
 		// Draw the start and quit options
 		DrawText("Press Enter to Start", windowWidth / 2 - MeasureText("Press Enter to Start", 30) / 2, windowHeight / 2 - 50, 30, RED);
 		DrawText("Press Esc to Quit", windowWidth / 2 - MeasureText("Press Esc to Quit", 30) / 2, windowHeight / 2 + 50, 30, RED);

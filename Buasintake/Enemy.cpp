@@ -20,13 +20,21 @@ void Enemy::tick(float deltaTime) {
 	// Determine movement direction towards the target
 	velocity = Vector2Subtract(target->getScreenPos(), getScreenPos());
 	if (Vector2Length(velocity) < radius) velocity = {}; // Reset velocity if close enough
+
+	// Store the current position for potential reverting
+	Vector2 originalPos = worldPos;
+
+	// Update the enemy's position based on velocity and update texture accordingly
 	BaseCharacter::tick(deltaTime);
 
 	// Check collision with the target and inflict damage
 	if (CheckCollisionRecs(target->getCollisionRec(), getCollisionRec())) {
+		// If there's a collision, revert the position to the original
+		worldPos = originalPos;
 		target->takeDamage(damagePerSec * deltaTime);
 	}
 }
+
 
 // Calculate and return the enemy's screen position relative to the target
 Vector2 Enemy::getScreenPos() {
