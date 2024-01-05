@@ -1,6 +1,6 @@
 Welcome to Coin Crusade, where valor meets fortune! In this epic adventure, you'll step into the shoes of a valiant knight on a quest to achieve the highest score possible by battling menacing slimes, cunning goblins, and collecting glittering coins scattered throughout the realm.
 
-Your mission is simple: survive and thrive! Defeat enemies to earn points, but beware, they won't make it easy. Slimes slither and goblins scheme, each with their own unique challenges and strategies to test your skills.
+Your mission is simple: survive and thrive! Defeat enemies to earn points, but beware, they won't make it easy. 
 
 But fear not, brave knight! Along your journey, you'll discover shieldshards and healthshards. Collect these precious relics to fortify your defenses and restore your vitality, increasing your chances of enduring the onslaught and climbing higher in the ranks.
 
