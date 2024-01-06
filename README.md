@@ -33,3 +33,4 @@ A Sinister Power Rising - Epic Dark Gothic Soundtrack byGioeleFazzeri
 
 tileset: https://stealthix.itch.io/rpg-nature-tileset
 sprites i used came from a tutorial from Udadamy by GameDev.tv
+the image from the start menu was made by a friend of mine
