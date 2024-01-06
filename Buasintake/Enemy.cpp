@@ -47,8 +47,8 @@ void Enemy::UpdateEnemySpawn(std::vector<Enemy*>& enemies, Character* target, Ma
 	double currentTime = GetTime();
 
 	// Check if it's time to spawn new enemies (every 5 seconds for testing)
-	if (currentTime - lastSpawnTime >= 5.0) {
-		int numEnemiesToSpawn = GetRandomValue(5, 20); // Randomly choose between 5 to 20 enemies
+	if (currentTime - lastSpawnTime >= 10.0) {
+		int numEnemiesToSpawn = GetRandomValue(10, 50); // Randomly choose between 10 to 50 enemies
 
 		for (int i = 0; i < numEnemiesToSpawn; ++i) {
 			Vector2 spawnPosition;

@@ -119,8 +119,8 @@ public:
 				ShieldBottle* shieldBottle = dynamic_cast<ShieldBottle*>(object);
 
 				if (coin) {
-					// Coin: Gain 100 points
-					pointSystem.increaseScore(100);
+					// Coin: Gain 150 points
+					pointSystem.increaseScore(150);
 					soundManager.PlayCollectSound();
 				}
 				else if (healthBottle) {

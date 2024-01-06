@@ -14,17 +14,21 @@ Character::Character(int winWidth, int winHeight) :
 void Character::attackEnemies(std::vector<Enemy*>& enemies, SoundManager& soundManager, PointSystem& pointSystem) {
 	soundManager.PlayHitSound();
 	for (auto enemy : enemies) {
+		if (!enemy->getAlive()) {
+			continue; // Skip already dead enemies
+		}
 		if (CheckCollisionRecs(enemy->getCollisionRec(), getWeaponCollisonRec())) {
 			enemy->takeDamage(15); // Deal damage to the enemy
-			soundManager.PlayEnemyDeadSound();
 
-			// Check if the enemy is dead
 			if (!enemy->getAlive()) {
-				pointSystem.increaseScore(50); // Increase score when enemy is killed
+				soundManager.PlayEnemyDeadSound();
+				pointSystem.increaseScore(100); // Increase score when enemy is killed
 			}
 		}
 	}
 }
+
+
 
 // Get the screen position of the character
 Vector2 Character::getScreenPos() {
